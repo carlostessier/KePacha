@@ -33,6 +33,7 @@
         android:text="@string/Login_button_label"
         android:id="@+id/button"
         android:layout_below="@+id/passwordField"
+        android:onClick="actionLoginButton"
         android:layout_centerHorizontal="true" />
 
     <TextView
