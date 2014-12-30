@@ -22,5 +22,9 @@
     <string name="loging_message">Logueando</string>
     <string name="waiting_message">Por favor espere...</string>
 
+    <string name="empty_inbox_label">No hay nuevos mensajes</string>
+    <string name="empty_friends_label">Añade amigos para empezar</string>
+
+
 
 </resources>
