@@ -22,10 +22,17 @@ public class LoginActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
+
+        //requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
         setContentView(R.layout.activity_login);
 
         initializeViews();
+
+
     }
 
 
@@ -79,16 +86,19 @@ public class LoginActivity extends Activity {
     private void loginUser(final String username, String password) {
 
 
-        setProgressBarIndeterminateVisibility(true);
+       // setProgressBarIndeterminateVisibility(true);
 
 
       final ProgressDialog dialog = ProgressDialog.show(LoginActivity.this,
                 getString(R.string.loging_message),
                 getString(R.string.waiting_message), true);
 
-        ParseUser.logInInBackground(username, password, new LogInCallback() {
+
+
+       ParseUser.logInInBackground(username, password, new LogInCallback() {
             public void done(ParseUser user, ParseException e) {
                 if (user != null) {
+                    // setProgressBarIndeterminateVisibility(false);
                     dialog.dismiss();
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);

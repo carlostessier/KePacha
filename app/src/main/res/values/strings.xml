@@ -5,7 +5,8 @@
     <string name="title_section1">Bandeja de Entrada</string>
     <string name="title_section2">Amigos</string>
     <string name="hello_world">Hello world!</string>
-    <string name="menu_logout_label">Logout</string>
+    <string name="menu_logout_label">Cerrar Sesión</string>
+    <string name="menu_edit_friends_label">Editar amigos</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="username_hint">Nombre de usuario</string>
     <string name="password_hint">Contraseña</string>
@@ -17,14 +18,14 @@
     <string name="empty_field_message">El campo %1$s está vacío.</string>
     <string name="add_user_error_message">No se ha podido añadir al usuario %1$s.</string>
     <string name="login_user_error_message">No se ha podido loguear con el usuario %1$s.</string>
-
+    <string name="error_message">Error en la aplicación.</string>
     <string name="signup_error_title">Error</string>
     <string name="loging_message">Logueando</string>
+    <string name="edit_friends_message">Cargando usuarios</string>
     <string name="waiting_message">Por favor espere...</string>
-
     <string name="empty_inbox_label">No hay nuevos mensajes</string>
     <string name="empty_friends_label">Añade amigos para empezar</string>
-
-
+    <string name="title_activity_edit_friends">Editar amigos</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
