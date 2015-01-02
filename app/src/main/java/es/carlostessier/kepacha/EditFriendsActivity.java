@@ -5,8 +5,6 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -28,23 +26,28 @@ public class EditFriendsActivity extends ListActivity {
 
     List<ParseUser> mUsers;
     ArrayList<String> usernames;
+    ArrayList<String> objectIds;
+
     ArrayAdapter<String> adapter;
 
+    ProgressDialog dialog;
+
     ParseUser mCurrentUser;
-    ParseRelation<ParseUser> mFreindsRelation;
+    ParseRelation<ParseUser> mFriendsRelation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_friends);
 
-        setListView();
 
 
     }
 
     private void setListView() {
+        objectIds = new ArrayList<String>();
         usernames= new ArrayList<String>();
+
         adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_checked,usernames);
         setListAdapter(adapter);
 
@@ -55,19 +58,18 @@ public class EditFriendsActivity extends ListActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        setListView();
 
         mCurrentUser = ParseUser.getCurrentUser();
 
-        mFreindsRelation = mCurrentUser.getRelation(ParseConstants.KEY_FRIENDS_RELATION);
-
-
+        mFriendsRelation = mCurrentUser.getRelation(ParseConstants.KEY_FRIENDS_RELATION);
 
         ParseQuery query = ParseUser.getQuery();
         query.orderByAscending(ParseConstants.KEY_USERNAME);
         query.setLimit(ParseConstants.MAX_USERS);
 
 
-        final ProgressDialog dialog = ProgressDialog.show(EditFriendsActivity.this,
+        dialog = ProgressDialog.show(EditFriendsActivity.this,
                 getString(R.string.edit_friends_message),
                 getString(R.string.waiting_message), true);
 
@@ -77,11 +79,12 @@ public class EditFriendsActivity extends ListActivity {
             public void done(List<ParseUser> users, ParseException e) {
                 if(e == null){
                     //sucess
-                    dialog.dismiss();
                     mUsers = users;
                     for(ParseUser user:users){
+                        objectIds.add(user.getObjectId());
                         adapter.add(user.getUsername());
                     }
+                    addFriendCheckmarks();
 
                 }
                 else{
@@ -91,6 +94,32 @@ public class EditFriendsActivity extends ListActivity {
             }
         });
 
+    }
+
+    private void addFriendCheckmarks() {
+
+        mFriendsRelation.getQuery().findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> parseUsers, ParseException e) {
+                if(e == null){
+
+                    //sucess
+                   for(ParseUser user:parseUsers){
+                       Log.d(TAG, "id " + user.getObjectId());
+                       if(objectIds.contains(user.getObjectId()))
+                           getListView().setItemChecked(objectIds.indexOf(user.getObjectId()),true);
+                   }
+
+                    dialog.dismiss();
+
+
+                }
+                else{
+                    Log.e(TAG, "ParseException caught: ", e);
+                    errorEditFriendsdDialog(getString(R.string.error_message));
+                }
+            }
+        });
     }
 
     private void errorEditFriendsdDialog(String message){
@@ -105,46 +134,30 @@ public class EditFriendsActivity extends ListActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_friends, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         if(getListView().isItemChecked(position)) {
             //add friend
-            mFreindsRelation.add(mUsers.get(position));
-            mCurrentUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e != null) {
-                        Log.e(TAG, "ParseException caught: ", e);
-                        errorEditFriendsdDialog(getString(R.string.error_message));
-                    }
-                }
-            });
+            mFriendsRelation.add(mUsers.get(position));
+
         }
         else{
             //remove friend
+            mFriendsRelation.remove(mUsers.get(position));
+
         }
+
+        mCurrentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "ParseException caught: ", e);
+                    errorEditFriendsdDialog(getString(R.string.error_message));
+                }
+            }
+        });
     }
 }
