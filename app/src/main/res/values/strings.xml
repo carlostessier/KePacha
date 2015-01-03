@@ -7,6 +7,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_logout_label">Cerrar Sesión</string>
     <string name="menu_edit_friends_label">Editar amigos</string>
+    <string name="menu_camera_label">Cámara</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="username_hint">Nombre de usuario</string>
     <string name="password_hint">Contraseña</string>
@@ -19,7 +20,11 @@
     <string name="add_user_error_message">No se ha podido añadir al usuario %1$s.</string>
     <string name="login_user_error_message">No se ha podido loguear con el usuario %1$s.</string>
     <string name="error_message">Error en la aplicación.</string>
+    <string name="error_external_storage">Error en el almacenamiento externo.</string>
     <string name="signup_error_title">Error</string>
+    <string name="warning_title">Atención</string>
+    <string name="size_warning_message">El vídeo debe de ser de menos de 10 MB</string>
+    <string name="error_file_too_big">El fichero seleccionado es muy grande, seleccciona otro fichero</string>
     <string name="loging_message">Logueando</string>
     <string name="edit_friends_message">Cargando usuarios</string>
     <string name="waiting_message">Por favor espere...</string>
@@ -27,5 +32,12 @@
     <string name="empty_friends_label">Añade amigos para empezar</string>
     <string name="title_activity_edit_friends">Editar amigos</string>
     <string name="action_settings">Settings</string>
+
+    <string-array name="camera_choices">
+        <item >Haz una foto</item>
+        <item >Haz un video</item>
+        <item >Elige una foto</item>
+        <item >Elige un video</item>
+    </string-array>
 
 </resources>

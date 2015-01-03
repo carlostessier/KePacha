@@ -1,7 +1,11 @@
 package es.carlostessier.kepacha;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -9,14 +13,30 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.parse.ParseUser;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
     final static String TAG = MainActivity.class.getName();
+
+     static final int TAKE_PHOTO_REQUEST = 0;
+     static final int TAKE_VIDEO_REQUEST = 1;
+     static final int PICK_PHOTO_REQUEST = 2;
+     static final int PICK_VIDEO_REQUEST = 3;
+     private static final String IMAGE_FILTER = "image/*";
+     private static final String VIDEO_FILTER = "video/*";
+    private final int FILE_SIZE_LIMIT = 1024*1024*1;
+
+
+    Uri mMediaUri;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -89,8 +109,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+
     }
 
     @Override
@@ -99,21 +121,121 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
-            Log.d(TAG,"usuario "+ ParseUser.getCurrentUser().getUsername()+" desconectado");
-            ParseUser.logOut();
-            navigateToLogin();
-            return true;
+        switch (id) {
+            //noinspection SimplifiableIfStatement
+            case R.id.action_logout:
+                Log.d(TAG, "usuario " + ParseUser.getCurrentUser().getUsername() + " desconectado");
+                ParseUser.logOut();
+                navigateToLogin();
+                break;
+            case R.id.action_edit_friends:
+                Intent intent = new Intent(this, EditFriendsActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.action_camera:
+                dialogCameraChoices();
+                break;
         }
-        else if (id == R.id.action_edit_friends){
-            Intent intent = new Intent(this, EditFriendsActivity.class);
-            startActivity(intent);
-        }
-
         return super.onOptionsItemSelected(item);
     }
+
+    private void dialogCameraChoices() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setItems(R.array.camera_choices, mDialogListener());
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private DialogInterface.OnClickListener mDialogListener() {
+
+        DialogInterface.OnClickListener dialogListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                takePhoto();
+                                break;
+                            case 1:
+                                takeVideo();
+                                break;
+                            case 2:
+                                choosePhoto();
+                                break;
+                            case 3:
+                                chooseVideo();
+                                break;
+                        }
+                    }
+                };
+
+        return dialogListener;
+    }
+
+    private DialogInterface.OnClickListener mWarningDialogListener() {
+
+        DialogInterface.OnClickListener dialogListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                        chooseVideoIntent.setType(VIDEO_FILTER);
+                        startActivityForResult(chooseVideoIntent,PICK_VIDEO_REQUEST);
+                    }
+                };
+
+        return dialogListener;
+    }
+
+
+    private void choosePhoto() {
+        Log.d(TAG, "Choose picture");
+        Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        choosePhotoIntent.setType(IMAGE_FILTER);
+        startActivityForResult(choosePhotoIntent,PICK_PHOTO_REQUEST);
+    }
+
+    private void chooseVideo() {
+        Log.d(TAG, "Choose video");
+        warningDialog(getString(R.string.size_warning_message));
+
+    }
+
+    private void takeVideo() {
+        Log.d(TAG, "Take video");
+        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        mMediaUri = FileUtilities.getOutputMediaFileUri(FileUtilities.MEDIA_TYPE_VIDEO);
+        if(mMediaUri== null){
+            String error = getString(R.string.error_external_storage);
+            Log.e(TAG,error);
+            errorDialog(error);
+        }
+        else {
+            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT ,mMediaUri);
+            takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT ,10);
+            takeVideoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY,0);
+            startActivityForResult(takeVideoIntent, TAKE_VIDEO_REQUEST);
+        }
+    }
+
+
+    private void takePhoto() {
+        Log.d(TAG, "Take picture");
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        mMediaUri = FileUtilities.getOutputMediaFileUri(FileUtilities.MEDIA_TYPE_IMAGE);
+        if(mMediaUri== null){
+            String error = getString(R.string.error_external_storage);
+            Log.e(TAG,error);
+            errorDialog(error);
+        }
+        else {
+            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT ,mMediaUri);
+            startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
+        }
+    }
+
+
 
     private void navigateToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
@@ -140,6 +262,86 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        String error = getString(R.string.error_message);
+
+        if(resultCode == RESULT_OK){
+            if(requestCode == PICK_VIDEO_REQUEST ||requestCode==PICK_PHOTO_REQUEST){
+                if(data!=null){
+                    mMediaUri = data.getData();
+                }
+                else{
+                    Log.e(TAG,error);
+                    errorDialog(error);
+                }
+
+                if(requestCode == PICK_VIDEO_REQUEST){
+                    int fileSize = 0;
+                    InputStream inputStream = null;
+                    try {
+                         inputStream = getContentResolver().openInputStream(mMediaUri);
+                        fileSize = inputStream.available();
+
+                    } catch (FileNotFoundException e) {
+                       Log.e(TAG,"Caught FileNotFoundException",e);
+                    } catch (IOException e) {
+                        Log.e(TAG,"Caught IOException",e);
+                    }
+                    finally{
+                        if(inputStream!=null)
+                            try{
+                            inputStream.close();
+                            } catch (IOException e) {
+                                Log.e(TAG,"Caught IOException",e);
+                            }
+                    }
+
+                    if(fileSize > FILE_SIZE_LIMIT){
+                        errorDialog(getString(R.string.error_file_too_big));
+                        return;
+                    }
+
+                }
+            }
+            else {
+                Log.e(TAG, "add image to the gallery");
+
+                Intent mediaScantIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                mediaScantIntent.setData(mMediaUri);
+                sendBroadcast(mediaScantIntent);
+            }
+        }
+        else if(resultCode != RESULT_CANCELED){
+            Log.e(TAG,error);
+            errorDialog(error);
+        }
+    }
+
+    private void errorDialog(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage(message);
+        builder.setPositiveButton(android.R.string.ok, null);
+        builder.setTitle(R.string.signup_error_title);
+        builder.setIcon(android.R.drawable.ic_dialog_alert);
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+
+    }
+
+    private void warningDialog(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage(message);
+        builder.setPositiveButton(android.R.string.ok, mWarningDialogListener());
+        builder.setTitle(R.string.warning_title);
+        builder.setIcon(android.R.drawable.ic_dialog_alert);
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+
+    }
 
 }
