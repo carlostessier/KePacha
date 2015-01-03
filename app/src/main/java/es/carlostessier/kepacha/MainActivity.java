@@ -1,6 +1,7 @@
 package es.carlostessier.kepacha;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -33,7 +34,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      static final int PICK_VIDEO_REQUEST = 3;
      private static final String IMAGE_FILTER = "image/*";
      private static final String VIDEO_FILTER = "video/*";
-    private final int FILE_SIZE_LIMIT = 1024*1024*1;
+    private final int FILE_SIZE_LIMIT = 1024*1024*10;
 
 
     Uri mMediaUri;
@@ -198,7 +199,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     private void chooseVideo() {
         Log.d(TAG, "Choose video");
-        warningDialog(getString(R.string.size_warning_message));
+        warningSizeDialog(getString(R.string.size_warning_message));
 
     }
 
@@ -207,9 +208,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         mMediaUri = FileUtilities.getOutputMediaFileUri(FileUtilities.MEDIA_TYPE_VIDEO);
         if(mMediaUri== null){
-            String error = getString(R.string.error_external_storage);
-            Log.e(TAG,error);
-            errorDialog(error);
+            errorDialog(MainActivity.this,
+                    R.string.error_file_too_big,
+                    R.string.signup_error_title,
+                    android.R.drawable.ic_dialog_alert);
         }
         else {
             takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT ,mMediaUri);
@@ -225,9 +227,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         mMediaUri = FileUtilities.getOutputMediaFileUri(FileUtilities.MEDIA_TYPE_IMAGE);
         if(mMediaUri== null){
-            String error = getString(R.string.error_external_storage);
-            Log.e(TAG,error);
-            errorDialog(error);
+            errorDialog(MainActivity.this,
+                    R.string.error_external_storage,
+                    R.string.signup_error_title,
+                    android.R.drawable.ic_dialog_alert);
         }
         else {
             takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT ,mMediaUri);
@@ -266,17 +269,16 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        String error = getString(R.string.error_message);
-
         if(resultCode == RESULT_OK){
             if(requestCode == PICK_VIDEO_REQUEST ||requestCode==PICK_PHOTO_REQUEST){
                 if(data!=null){
                     mMediaUri = data.getData();
                 }
                 else{
-                    Log.e(TAG,error);
-                    errorDialog(error);
-                }
+                    errorDialog(MainActivity.this,
+                            R.string.error_file_too_big,
+                            R.string.signup_error_title,
+                            android.R.drawable.ic_dialog_alert);                }
 
                 if(requestCode == PICK_VIDEO_REQUEST){
                     int fileSize = 0;
@@ -300,7 +302,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     }
 
                     if(fileSize > FILE_SIZE_LIMIT){
-                        errorDialog(getString(R.string.error_file_too_big));
+                        errorDialog(MainActivity.this,
+                                R.string.error_file_too_big,
+                                R.string.signup_error_title,
+                                android.R.drawable.ic_dialog_alert);
                         return;
                     }
 
@@ -315,24 +320,25 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             }
         }
         else if(resultCode != RESULT_CANCELED){
-            Log.e(TAG,error);
-            errorDialog(error);
+            errorDialog(MainActivity.this,R.string.error_message,R.string.signup_error_title,android.R.drawable.ic_dialog_alert);
         }
     }
 
-    private void errorDialog(String message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setMessage(message);
+    private void errorDialog(Context context,int messageId, int titleId, int iconId){
+        String message = getString(messageId);
+        Log.e(TAG,message);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(messageId);
         builder.setPositiveButton(android.R.string.ok, null);
-        builder.setTitle(R.string.signup_error_title);
-        builder.setIcon(android.R.drawable.ic_dialog_alert);
+        builder.setTitle(titleId);
+        builder.setIcon(iconId);
         AlertDialog dialog = builder.create();
 
         dialog.show();
 
     }
 
-    private void warningDialog(String message){
+    private void warningSizeDialog(String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setMessage(message);
         builder.setPositiveButton(android.R.string.ok, mWarningDialogListener());
