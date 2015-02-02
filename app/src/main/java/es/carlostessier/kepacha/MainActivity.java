@@ -318,6 +318,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 mediaScantIntent.setData(mMediaUri);
                 sendBroadcast(mediaScantIntent);
             }
+
+            Intent recipientsIntent = new Intent(this,RecipientsActivity.class);
+            recipientsIntent.setData(mMediaUri);
+            startActivity(recipientsIntent);
         }
         else if(resultCode != RESULT_CANCELED){
             errorDialog(MainActivity.this,R.string.error_message,R.string.signup_error_title,android.R.drawable.ic_dialog_alert);

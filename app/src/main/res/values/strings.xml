@@ -34,10 +34,12 @@
     <string name="action_settings">Settings</string>
 
     <string-array name="camera_choices">
-        <item >Haz una foto</item>
-        <item >Haz un video</item>
-        <item >Elige una foto</item>
-        <item >Elige un video</item>
+        <item>Haz una foto</item>
+        <item>Haz un video</item>
+        <item>Elige una foto</item>
+        <item>Elige un video</item>
     </string-array>
+
+    <string name="title_activity_recipients">Choose Recipients</string>
 
 </resources>

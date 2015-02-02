@@ -2,12 +2,12 @@ package es.carlostessier.kepacha;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -30,7 +30,7 @@ public class EditFriendsActivity extends ListActivity {
 
     ArrayAdapter<String> adapter;
 
-    ProgressDialog dialog;
+    ProgressBar spinner;
 
     ParseUser mCurrentUser;
     ParseRelation<ParseUser> mFriendsRelation;
@@ -40,7 +40,9 @@ public class EditFriendsActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_friends);
 
-
+        spinner = (ProgressBar)
+                findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
 
     }
 
@@ -69,9 +71,8 @@ public class EditFriendsActivity extends ListActivity {
         query.setLimit(ParseConstants.MAX_USERS);
 
 
-        dialog = ProgressDialog.show(EditFriendsActivity.this,
-                getString(R.string.edit_friends_message),
-                getString(R.string.waiting_message), true);
+        spinner.setVisibility(View.VISIBLE);
+
 
 
         query.findInBackground(new FindCallback<ParseUser>() {
@@ -110,7 +111,8 @@ public class EditFriendsActivity extends ListActivity {
                            getListView().setItemChecked(objectIds.indexOf(user.getObjectId()),true);
                    }
 
-                    dialog.dismiss();
+                    spinner.setVisibility(View.INVISIBLE);
+
 
 
                 }
