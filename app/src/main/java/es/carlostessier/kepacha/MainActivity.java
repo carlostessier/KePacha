@@ -150,7 +150,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     private DialogInterface.OnClickListener mDialogListener() {
 
-        DialogInterface.OnClickListener dialogListener =
+        return
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -171,12 +171,11 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     }
                 };
 
-        return dialogListener;
     }
 
     private DialogInterface.OnClickListener mWarningDialogListener() {
 
-        DialogInterface.OnClickListener dialogListener =
+        return
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -186,7 +185,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     }
                 };
 
-        return dialogListener;
     }
 
 
@@ -278,7 +276,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     errorDialog(MainActivity.this,
                             R.string.error_file_too_big,
                             R.string.signup_error_title,
-                            android.R.drawable.ic_dialog_alert);                }
+                            android.R.drawable.ic_dialog_alert);
+                }
 
                 if(requestCode == PICK_VIDEO_REQUEST){
                     int fileSize = 0;
@@ -306,7 +305,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                                 R.string.error_file_too_big,
                                 R.string.signup_error_title,
                                 android.R.drawable.ic_dialog_alert);
-                        return;
                     }
 
                 }

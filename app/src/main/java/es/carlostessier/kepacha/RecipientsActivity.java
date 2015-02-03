@@ -88,8 +88,10 @@ public class RecipientsActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-
-        mSendMenuItem.setVisible(true);
+        if (l.getCheckedItemCount()>0)
+         mSendMenuItem.setVisible(true);
+        else
+            mSendMenuItem.setVisible(false);
     }
 
     @Override
