@@ -35,11 +35,12 @@ public class RecipientsActivity extends ListActivity {
     ParseUser mCurrentUser;
     ParseRelation<ParseUser> mFriendsRelation;
 
+    MenuItem mSendMenuItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipients);
-
         spinner = (ProgressBar)
                 findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
@@ -84,11 +85,18 @@ public class RecipientsActivity extends ListActivity {
 
     }
 
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        mSendMenuItem.setVisible(true);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_recipients, menu);
+        mSendMenuItem = menu.getItem(0);
         return true;
     }
 
@@ -100,7 +108,7 @@ public class RecipientsActivity extends ListActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_send) {
             return true;
         }
 

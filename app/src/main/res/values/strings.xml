@@ -32,7 +32,7 @@
     <string name="empty_friends_label">Añade amigos para empezar</string>
     <string name="title_activity_edit_friends">Editar amigos</string>
     <string name="action_settings">Settings</string>
-
+    <string name="action_send">Enviar</string>
     <string-array name="camera_choices">
         <item>Haz una foto</item>
         <item>Haz un video</item>
