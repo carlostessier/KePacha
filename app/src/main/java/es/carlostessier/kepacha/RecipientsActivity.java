@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
@@ -25,7 +26,7 @@ public class RecipientsActivity extends ListActivity {
 
     final static String TAG = RecipientsActivity.class.getName();
 
-    List<ParseUser> mUsers;
+    List<ParseUser> mFriends;
     ArrayList<String> usernames;
 
     ArrayAdapter<String> adapter;
@@ -70,7 +71,7 @@ public class RecipientsActivity extends ListActivity {
                 if(e == null){
                     //sucess
                     spinner.setVisibility(View.INVISIBLE);
-                    mUsers = users;
+                    mFriends = users;
                     for(ParseUser user:users){
                         adapter.add(user.getUsername());
                     }
@@ -88,10 +89,8 @@ public class RecipientsActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        if (l.getCheckedItemCount()>0)
-         mSendMenuItem.setVisible(true);
-        else
-            mSendMenuItem.setVisible(false);
+
+        mSendMenuItem.setVisible(true);
     }
 
     @Override
@@ -111,16 +110,37 @@ public class RecipientsActivity extends ListActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_send) {
+            ParseObject message = createMessage();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void setListView() {
-        usernames= new ArrayList<String>();
+    private ParseObject createMessage() {
+        ParseObject message = new ParseObject(ParseConstants.CLASS_MESSAGES);
+        message.put(ParseConstants.KEY_SENDER_ID,ParseUser.getCurrentUser().getObjectId());
+        message.put(ParseConstants.KEY_SENDER_NAME,ParseUser.getCurrentUser().getUsername());
+        message.put(ParseConstants.KEY_RECIPIENT_IDS,getRecipientIds());
 
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_checked,usernames);
+        return message;
+
+    }
+
+    private ArrayList<String> getRecipientIds() {
+        ArrayList<String> recipientList = new ArrayList<>();
+        for(int i=0; i< getListView().getCount();i++){
+            if(getListView().isItemChecked(i)){
+                recipientList.add(mFriends.get(i).getObjectId());
+            }
+        }
+        return recipientList;
+    }
+
+    private void setListView() {
+        usernames= new ArrayList<>();
+
+        adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_checked,usernames);
         setListAdapter(adapter);
 
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
