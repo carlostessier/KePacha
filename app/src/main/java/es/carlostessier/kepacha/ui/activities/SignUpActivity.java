@@ -1,4 +1,4 @@
-package es.carlostessier.kepacha;
+package es.carlostessier.kepacha.ui.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,6 +10,8 @@ import android.widget.EditText;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import es.carlostessier.kepacha.R;
 
 
 public class SignUpActivity extends Activity {

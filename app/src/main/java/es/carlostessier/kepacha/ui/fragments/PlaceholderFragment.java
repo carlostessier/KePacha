@@ -1,6 +1,7 @@
-package es.carlostessier.kepacha;
+package es.carlostessier.kepacha.ui.fragments;
 
 /**
+ *
  * Created by carlosfernandez on 30/12/14.
  */
 
@@ -9,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import es.carlostessier.kepacha.R;
 
 /**
  * A placeholder fragment containing a simple view.

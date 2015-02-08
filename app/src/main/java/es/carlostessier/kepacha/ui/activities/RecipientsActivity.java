@@ -1,7 +1,9 @@
-package es.carlostessier.kepacha;
+package es.carlostessier.kepacha.ui.activities;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,16 +12,23 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.carlostessier.kepacha.R;
+import es.carlostessier.kepacha.utils.FileHelper;
+import es.carlostessier.kepacha.utils.ParseConstants;
 
 
 public class RecipientsActivity extends ListActivity {
@@ -38,6 +47,9 @@ public class RecipientsActivity extends ListActivity {
 
     MenuItem mSendMenuItem;
 
+    Uri mMediaUri;
+    String mFileType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +57,10 @@ public class RecipientsActivity extends ListActivity {
         spinner = (ProgressBar)
                 findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
+
+        Intent intent = getIntent();
+        mMediaUri = intent.getData();
+        mFileType = intent.getStringExtra(ParseConstants.KEY_FILE_TYPE);
     }
 
     @Override
@@ -108,13 +124,33 @@ public class RecipientsActivity extends ListActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_send) {
             ParseObject message = createMessage();
+            if(message == null){
+                errorEditFriendsdDialog(getString(R.string.error_file_message));
+            }
+            else{
+                send(message);
+                finish();
+            }
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void send(ParseObject message) {
+        message.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e==null)
+                    Toast.makeText(RecipientsActivity.this,"¡Mensaje enviado!",Toast.LENGTH_SHORT).show();
+
+                else
+                    errorEditFriendsdDialog(getString(R.string.error_file_message));
+
+            }
+        });
     }
 
     private ParseObject createMessage() {
@@ -122,9 +158,25 @@ public class RecipientsActivity extends ListActivity {
         message.put(ParseConstants.KEY_SENDER_ID,ParseUser.getCurrentUser().getObjectId());
         message.put(ParseConstants.KEY_SENDER_NAME,ParseUser.getCurrentUser().getUsername());
         message.put(ParseConstants.KEY_RECIPIENT_IDS,getRecipientIds());
+        message.put(ParseConstants.KEY_FILE_TYPE,mFileType);
+        byte[] fileBytes =  FileHelper.getByteArrayFromFile(this, mMediaUri);
 
-        return message;
+        if(fileBytes==null){
+            return null;
+        }
+        else {
+            if (mFileType.equals(ParseConstants.TYPE_IMAGE)) {
+                fileBytes = FileHelper.reduceImageForUpload(fileBytes);
+            }
 
+            String fileName = FileHelper.getFileName(this,mMediaUri,mFileType);
+
+            ParseFile file = new ParseFile(fileName, fileBytes);
+
+            message.put(ParseConstants.KEY_FILE, file);
+
+            return message;
+        }
     }
 
     private ArrayList<String> getRecipientIds() {

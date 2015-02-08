@@ -1,7 +1,8 @@
-package es.carlostessier.kepacha;
+package es.carlostessier.kepacha.utils;
 
 /**
- * Created by carlosfernandez on 01/01/15.
+ *
+ *  Created by carlosfernandez on 01/01/15.
  */
 public class ParseConstants {
     public static final String CLASS_MESSAGES = "message";
@@ -16,4 +17,6 @@ public class ParseConstants {
     public static final String KEY_FILE = "file";
     public static final String KEY_FILE_TYPE = "fileType";
 
+    public static final String TYPE_IMAGE = "imagen";
+    public static final String TYPE_VIDEO = "video";
 }

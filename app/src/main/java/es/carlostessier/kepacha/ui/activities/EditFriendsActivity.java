@@ -1,4 +1,4 @@
-package es.carlostessier.kepacha;
+package es.carlostessier.kepacha.ui.activities;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -18,6 +18,9 @@ import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.carlostessier.kepacha.utils.ParseConstants;
+import es.carlostessier.kepacha.R;
 
 
 public class EditFriendsActivity extends ListActivity {
@@ -47,10 +50,10 @@ public class EditFriendsActivity extends ListActivity {
     }
 
     private void setListView() {
-        objectIds = new ArrayList<String>();
-        usernames= new ArrayList<String>();
+        objectIds = new ArrayList<>();
+        usernames= new ArrayList<>();
 
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_checked,usernames);
+        adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_checked,usernames);
         setListAdapter(adapter);
 
         getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -66,7 +69,7 @@ public class EditFriendsActivity extends ListActivity {
 
         mFriendsRelation = mCurrentUser.getRelation(ParseConstants.KEY_FRIENDS_RELATION);
 
-        ParseQuery query = ParseUser.getQuery();
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.orderByAscending(ParseConstants.KEY_USERNAME);
         query.setLimit(ParseConstants.MAX_USERS);
 

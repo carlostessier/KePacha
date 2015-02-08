@@ -1,4 +1,4 @@
-package es.carlostessier.kepacha;
+package es.carlostessier.kepacha.ui.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -7,7 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import es.carlostessier.kepacha.R;
+
 /**
+ *
  * Created by carlosfernandez on 30/12/14.
  */
 public class InboxFragment extends ListFragment {

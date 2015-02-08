@@ -20,6 +20,7 @@
     <string name="add_user_error_message">No se ha podido añadir al usuario %1$s.</string>
     <string name="login_user_error_message">No se ha podido loguear con el usuario %1$s.</string>
     <string name="error_message">Error en la aplicación.</string>
+    <string name="error_file_message">Ha ocurrido un error con el fichero seleccionado, selecciona otro fichero</string>
     <string name="error_external_storage">Error en el almacenamiento externo.</string>
     <string name="signup_error_title">Error</string>
     <string name="warning_title">Atención</string>

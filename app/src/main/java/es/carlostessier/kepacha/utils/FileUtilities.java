@@ -1,4 +1,4 @@
-package es.carlostessier.kepacha;
+package es.carlostessier.kepacha.utils;
 
 import android.net.Uri;
 import android.os.Environment;
@@ -10,15 +10,16 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
+ *
  * Created by carlosfernandez on 03/01/15.
  */
 public class FileUtilities {
 
     final static String TAG = FileUtilities.class.getName();
 
-    static final int MEDIA_TYPE_IMAGE = 1;
-    static final int MEDIA_TYPE_VIDEO = 2;
-    static final String APP_NAME = "yep";
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int MEDIA_TYPE_VIDEO = 2;
+    public static final String APP_NAME = "yep";
 
 
     public static Uri getOutputMediaFileUri(int mediaType) {
@@ -30,7 +31,7 @@ public class FileUtilities {
             //get URI
 
             // 1 Obtener el directorio del almacenamiento externo
-            File mediaStorageDir = null;
+            File mediaStorageDir;
 
             switch (mediaType) {
                 case MEDIA_TYPE_IMAGE:
@@ -89,10 +90,10 @@ public class FileUtilities {
 
 
     private static boolean isExternalStorageAvailable() {
+
         String state = Environment.getExternalStorageState();
 
-        if(state.equals(Environment.MEDIA_MOUNTED))
-            return true;
-        else return false;
+        return state.equals(Environment.MEDIA_MOUNTED);
+
     }
 }

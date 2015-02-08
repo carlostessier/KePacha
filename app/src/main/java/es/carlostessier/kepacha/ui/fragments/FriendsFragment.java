@@ -1,4 +1,4 @@
-package es.carlostessier.kepacha;
+package es.carlostessier.kepacha.ui.fragments;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -19,7 +19,11 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.carlostessier.kepacha.utils.ParseConstants;
+import es.carlostessier.kepacha.R;
+
 /**
+ *
  * Created by carlosfernandez on 30/12/14.
  */
 public class FriendsFragment extends ListFragment {
@@ -87,9 +91,9 @@ public class FriendsFragment extends ListFragment {
     }
 
     private void setListView() {
-        usernames= new ArrayList<String>();
+        usernames= new ArrayList<>();
 
-        adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,usernames);
+        adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,usernames);
         setListAdapter(adapter);
 
 

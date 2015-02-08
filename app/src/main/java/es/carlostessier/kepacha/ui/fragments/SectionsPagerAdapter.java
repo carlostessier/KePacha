@@ -1,6 +1,7 @@
-package es.carlostessier.kepacha;
+package es.carlostessier.kepacha.ui.fragments;
 
 /**
+ *
  * Created by carlosfernandez on 30/12/14.
  */
 
@@ -10,6 +11,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.Locale;
+
+import es.carlostessier.kepacha.R;
+
 
 /**
  * A {@link android.support.v4.app.FragmentPagerAdapter} that returns a fragment corresponding to
