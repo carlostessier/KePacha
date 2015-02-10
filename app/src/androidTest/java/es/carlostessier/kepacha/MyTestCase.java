@@ -21,8 +21,8 @@ public class MyTestCase extends ActivityInstrumentationTestCase2<LoginActivity> 
     private EditText passwordField;
     private LoginActivity actividad;
 
-    private static final String LOGIN = "carlos";
-    private static final String PASSWORD = "1234";
+    private static final String LOGIN = "eramiro";
+    private static final String PASSWORD = "1 2 3 4";
 
     public MyTestCase() {
 //		super("com.example.calc", MainActivity.class);
@@ -32,13 +32,11 @@ public class MyTestCase extends ActivityInstrumentationTestCase2<LoginActivity> 
 
     protected void setUp() throws Exception {
         super.setUp();
-        setActivityInitialTouchMode(false);
+//        setActivityInitialTouchMode(false);
 //        ActivityInstrumentationTestCase2.setActivityTouchMode(false);
         actividad = getActivity();
-
         usernameField = (EditText) actividad.findViewById(R.id.usernameField);
         passwordField = (EditText) actividad.findViewById(R.id.passwordField);
-
         login = (Button) actividad.findViewById(R.id.button);
         // MainActivity actividad = getActivity();
         // suma = (Button) actividad.findViewById(R.id.button1);
@@ -61,8 +59,9 @@ public class MyTestCase extends ActivityInstrumentationTestCase2<LoginActivity> 
         //usernameField.clearComposingText();
 
         TouchUtils.tapView(this, usernameField);
-        this.sendKeys(LOGIN);
-//        sendKeys("carlos");
+        getInstrumentation().sendStringSync(LOGIN);
+//        this.sendKeys(LOGIN);
+        // sendKeys(KeyEvent.KEYCODE_DPAD_RIGHT);
         // now on value2 entry
         TouchUtils.tapView(this, passwordField);
         this.sendKeys(PASSWORD);
@@ -81,8 +80,7 @@ public class MyTestCase extends ActivityInstrumentationTestCase2<LoginActivity> 
         TouchUtils.tapView(this, etext2);
         sendKeys(NUMBER_2);
         // now on Multiply button
-        TouchUtils.clickView(this, mul);
-        // sendKeys(KeyEvent.KEYCODE_DPAD_RIGHT);
+
         // sendKeys("ENTER");
         // get result
         String mathResult2 = etiqueta.getText().toString();
@@ -91,4 +89,3 @@ public class MyTestCase extends ActivityInstrumentationTestCase2<LoginActivity> 
     }*/
 
 }
-
