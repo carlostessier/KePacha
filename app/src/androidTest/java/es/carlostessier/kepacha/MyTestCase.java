@@ -21,6 +21,8 @@ public class MyTestCase extends ActivityInstrumentationTestCase2<LoginActivity> 
     private EditText passwordField;
     private LoginActivity actividad;
 
+    private static final String LOGIN = "carlos";
+    private static final String PASSWORD = "1234";
 
     public MyTestCase() {
 //		super("com.example.calc", MainActivity.class);
@@ -30,7 +32,7 @@ public class MyTestCase extends ActivityInstrumentationTestCase2<LoginActivity> 
 
     protected void setUp() throws Exception {
         super.setUp();
-
+        setActivityInitialTouchMode(false);
 //        ActivityInstrumentationTestCase2.setActivityTouchMode(false);
         actividad = getActivity();
 
@@ -48,8 +50,7 @@ public class MyTestCase extends ActivityInstrumentationTestCase2<LoginActivity> 
         super.tearDown();
     }
 
-    private static final String LOGIN = "carlos";
-    private static final String PASSWORD = "1234";
+
 
 
     public void testAddValues() {
@@ -57,15 +58,16 @@ public class MyTestCase extends ActivityInstrumentationTestCase2<LoginActivity> 
         if(ParseUser.getCurrentUser()!=null)
             ParseUser.logOut();
 
+        //usernameField.clearComposingText();
+
         TouchUtils.tapView(this, usernameField);
-//        sendKeys(KeyEvent.KEYCODE_DPAD_CENTER);
-//        sendKeys(LOGIN);
-        sendKeys("carlos");
+        this.sendKeys(LOGIN);
+//        sendKeys("carlos");
         // now on value2 entry
         TouchUtils.tapView(this, passwordField);
-        sendKeys(PASSWORD);
+        this.sendKeys(PASSWORD);
         // now on Add button
-      //  TouchUtils.clickView(this, login);
+        TouchUtils.clickView(this, login);
         // sendKeys("ENTER");
         // get result
         // Log.d("JUNIT", mathResult1);
