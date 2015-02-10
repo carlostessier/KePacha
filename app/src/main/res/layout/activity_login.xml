@@ -15,7 +15,11 @@
         android:id="@+id/usernameField"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:hint="@string/username_hint" />
+        android:hint="@string/username_hint">
+        <requestFocus />
+    </EditText>
+
+
 
     <EditText
         android:layout_width="match_parent"

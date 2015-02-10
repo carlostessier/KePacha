@@ -94,7 +94,6 @@ public class LoginActivity extends Activity {
                 getString(R.string.waiting_message), true);
 
 
-
        ParseUser.logInInBackground(username, password, new LogInCallback() {
             public void done(ParseUser user, ParseException e) {
                 if (user != null) {
