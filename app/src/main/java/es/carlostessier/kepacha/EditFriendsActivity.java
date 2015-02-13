@@ -103,7 +103,7 @@ public class EditFriendsActivity extends ListActivity {
             public void done(List<ParseUser> parseUsers, ParseException e) {
                 if(e == null){
 
-                    //sucess
+                    //success
                    for(ParseUser user:parseUsers){
                        Log.d(TAG, "id " + user.getObjectId());
                        if(objectIds.contains(user.getObjectId()))
