@@ -102,8 +102,7 @@ public class LoginActivity extends Activity {
                     dialog.dismiss();
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
                 } else {
                     String message = String.format(getString(R.string.login_user_error_message), username);

@@ -49,10 +49,18 @@
             android:label="@string/title_activity_recipients"
             android:parentActivityName=".ui.activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.activities.ViewImageActivity"
+            android:label="@string/title_activity_view_image"
+            android:parentActivityName=".ui.activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.carlostessier.kepacha.ui.activities.MainActivity" />
         </activity>
     </application>
 
