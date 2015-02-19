@@ -19,6 +19,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.carlostessier.kepacha.MessageAdapter;
 import es.carlostessier.kepacha.R;
 import es.carlostessier.kepacha.utils.ParseConstants;
 
@@ -29,7 +30,7 @@ import es.carlostessier.kepacha.utils.ParseConstants;
 public class InboxFragment extends ListFragment {
 
     ProgressBar spinner;
-    List<ParseObject> mMessages;
+    protected List<ParseObject> mMessages;
 
     private ArrayList<String> messages;
     private ArrayAdapter adapter;
@@ -42,9 +43,6 @@ public class InboxFragment extends ListFragment {
         super.onResume();
 
         messages= new ArrayList<>();
-
-        adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,messages);
-        setListAdapter(adapter);
 
         spinner.setVisibility(View.VISIBLE);
 
@@ -61,6 +59,13 @@ public class InboxFragment extends ListFragment {
                     for(ParseObject message: mMessages){
                         adapter.add(message.getString(ParseConstants.KEY_SENDER_NAME));
                     }
+
+//                    //        adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,messages);
+//                    MessageAdapter adapter2 = new MessageAdapter(getListView().getContext(),mMessages);
+//
+//                    setListAdapter(adapter2);
+
+
 
                     spinner.setVisibility(View.INVISIBLE);
 
