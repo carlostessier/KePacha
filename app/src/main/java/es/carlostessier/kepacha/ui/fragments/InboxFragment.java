@@ -57,14 +57,10 @@ public class InboxFragment extends ListFragment {
                     mMessages = parseObjects;
 
                     for(ParseObject message: mMessages){
-                        adapter.add(message.getString(ParseConstants.KEY_SENDER_NAME));
+//                        adapter.add(message.getString(ParseConstants.KEY_SENDER_NAME));
+                        MessageAdapter adapter2 = new MessageAdapter(getListView().getContext(),mMessages);
+                        setListAdapter(adapter2);
                     }
-
-//                    //        adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,messages);
-//                    MessageAdapter adapter2 = new MessageAdapter(getListView().getContext(),mMessages);
-//
-//                    setListAdapter(adapter2);
-
 
 
                     spinner.setVisibility(View.INVISIBLE);
