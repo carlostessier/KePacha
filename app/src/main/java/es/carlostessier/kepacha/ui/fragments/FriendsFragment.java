@@ -25,6 +25,7 @@ import es.carlostessier.kepacha.R;
 /**
  *
  * Created by carlosfernandez on 30/12/14.
+ * more
  */
 public class FriendsFragment extends ListFragment {
 
