@@ -5,4 +5,5 @@
     <dimen name="message_item_vertical_margin">8dp</dimen>
     <dimen name="message_inbox_vertical_margin">8dp</dimen>
     <dimen name="message_inbox_horizontal_margin">8dp</dimen>
+    <dimen name="message_vertical_padding">8dp</dimen>
 </resources>

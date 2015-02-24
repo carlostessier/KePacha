@@ -3,12 +3,14 @@ package es.carlostessier.kepacha.ui.fragments;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -31,6 +33,7 @@ public class InboxFragment extends ListFragment {
 
     ProgressBar spinner;
     protected List<ParseObject> mMessages;
+    protected SwipeRefreshLayout mSwipeRefreshLayout;
 
     private ArrayList<String> messages;
     private ArrayAdapter adapter;
@@ -83,6 +86,9 @@ public class InboxFragment extends ListFragment {
                 rootView.findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+        mSwipeRefreshLayout.setColorSchemeColors(R.color.swipeRefresh1,R.color.swipeRefresh2,R.color.swipeRefresh3,R.color.swipeRefresh4);
 
         return rootView;
     }
@@ -98,4 +104,14 @@ public class InboxFragment extends ListFragment {
         dialog.show();
 
     }
+    protected SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            Toast.makeText(getActivity(),"We're refreshing!", Toast.LENGTH_SHORT).show();
+            if (mSwipeRefreshLayout.isRefreshing())
+            {
+            mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }
+    };
 }

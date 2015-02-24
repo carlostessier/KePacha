@@ -15,19 +15,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/messageIcon"
-        android:src="@drawable/ic_action_picture"
+        android:src="@drawable/ic_picture"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/message_item_vertical_margin"
-        android:paddingBottom="@dimen/message_item_vertical_margin"/>
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/senderLabel"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/messageIcon"
-        android:layout_toEndOf="@+id/messageIcon"
-        android:paddingLeft="@dimen/activity_horizontal_margin"/>
+        android:layout_toLeftOf="@+id/messageIcon"
+        android:layout_alignParentLeft="true"
+        android:text="test name"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/message_vertical_padding"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/senderLabel"
+        android:text="New Text"
+        android:id="@+id/timeLabel"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:layout_toLeftOf="@+id/messageIcon"
+        android:paddingBottom="@dimen/message_inbox_vertical_margin"
+        android:textSize="12sp"
+
+        />
+
+
 </RelativeLayout>
 </LinearLayout>

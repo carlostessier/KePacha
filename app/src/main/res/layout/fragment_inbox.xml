@@ -11,6 +11,13 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true">
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
@@ -20,6 +27,7 @@
         android:paddingBottom="@dimen/message_inbox_vertical_margin"
         android:clipToPadding="false"
       />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@android:id/empty"
