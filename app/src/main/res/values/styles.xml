@@ -3,6 +3,13 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-    </style>
+    <item name="android:listViewStyle">@style/LightPurpleBackground</item>
+    <item name="android:gridViewStyle">@style/LightPurpleBackground</item>
+</style>
+
+<style name="LightPurpleBackground">
+    <item name="android:background">@color/light_purple_background</item>
+<item name="android:divider">@null</item>
+</style>
 
 </resources>
