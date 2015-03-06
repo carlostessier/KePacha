@@ -38,7 +38,8 @@ public class FriendsFragment extends Fragment {
     List<ParseUser> mUsers;
     ArrayList<String> usernames;
 
-    ArrayAdapter<String> adapter;
+//    ArrayAdapter<String> adapter;
+    UserAdapter adapter;
 
     ProgressBar spinner;
 
@@ -65,7 +66,7 @@ public class FriendsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        setmGridView();
+
 
         mCurrentUser = ParseUser.getCurrentUser();
 
@@ -86,9 +87,26 @@ public class FriendsFragment extends Fragment {
                     //sucess
                     spinner.setVisibility(View.INVISIBLE);
                     mUsers = users;
-                    for(ParseUser user:users){
-                        adapter.add(user.getUsername());
+
+                    String[] usernames = new String[mUsers.size()];
+                    int i = 0;
+                    for(ParseUser user : mUsers) {
+                        usernames[i] = user.getUsername();
+                        i++;
                     }
+
+//                    for(ParseUser user:mUsers){
+//                        adapter.add(user);
+//                    }
+
+                    if (mGridView.getAdapter() == null) {
+                        adapter = new UserAdapter(getActivity(), mUsers);
+                        mGridView.setAdapter(adapter);
+                    } else {
+                        ((UserAdapter)mGridView.getAdapter()).refill(mUsers);
+
+                    }
+                    mGridView.setAdapter(adapter);
 
                 }
                 else{
@@ -98,23 +116,19 @@ public class FriendsFragment extends Fragment {
             }
         });
 
+//        setmGridView();
     }
 
-    private void setmGridView() {
-        usernames= new ArrayList<>();
-
-        adapter = new ArrayAdapter<>(
-                getActivity(),
-                android.R.layout.simple_list_item_1,usernames);
-        mGridView.setAdapter(adapter);
-//        if (mGridView.getAdapter() == null) {
-//            UserAdapter adapter2 = new UserAdapter(getActivity(), mUsers);
-//            mGridView.setAdapter(adapter2);
-//        } else {
-//            ((UserAdapter)mGridView.getAdapter()).refill(mUsers);
-
-//        }
-    }
+//    private void setmGridView() {
+////        usernames= new ArrayList<>();
+////
+////        adapter = new ArrayAdapter<>(
+////                getActivity(),
+////                android.R.layout.simple_list_item_1,usernames);
+//
+////useradapter
+//
+//    }
 
 //    }
 

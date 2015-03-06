@@ -4,13 +4,16 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
     <item name="android:listViewStyle">@style/LightPurpleBackground</item>
-    <item name="android:gridViewStyle">@style/LightPurpleBackground</item>
+    <item name="android:gridViewStyle">@style/LightPurpleBackground.GridView</item>
 </style>
 
 <style name="LightPurpleBackground">
     <item name="android:background">@color/light_purple_background</item>
 <item name="android:divider">@null</item>
+</style>
 
+    <style name="LightPurpleBackground.GridView">
+        <item name="android:padding">@dimen/user_grid_spacing</item>
 </style>
 
 </resources>
