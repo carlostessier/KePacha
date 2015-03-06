@@ -29,7 +29,7 @@ import es.carlostessier.kepacha.utils.ParseConstants;
  *
  * Created by carlosfernandez on 30/12/14.
  */
-public class InboxFragment extends ListFragment {
+public class  InboxFragment extends ListFragment {
 
     ProgressBar spinner;
     protected List<ParseObject> mMessages;
@@ -49,6 +49,10 @@ public class InboxFragment extends ListFragment {
 
         spinner.setVisibility(View.VISIBLE);
 
+        retrieveMessages();
+    }
+
+    private void retrieveMessages() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseConstants.CLASS_MESSAGES);
         query.whereEqualTo(ParseConstants.KEY_RECIPIENT_IDS, ParseUser.getCurrentUser().getObjectId());
         query.addDescendingOrder(ParseConstants.KEY_CREATED_AT );
@@ -56,14 +60,20 @@ public class InboxFragment extends ListFragment {
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
+
+                if (mSwipeRefreshLayout.isRefreshing())
+                {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+
                 if(e==null) {
                     mMessages = parseObjects;
 
-                    for(ParseObject message: mMessages){
+//                    for(ParseObject message: mMessages){
 //                        adapter.add(message.getString(ParseConstants.KEY_SENDER_NAME));
                         MessageAdapter adapter2 = new MessageAdapter(getListView().getContext(),mMessages);
                         setListAdapter(adapter2);
-                    }
+//                    }
 
 
                     spinner.setVisibility(View.INVISIBLE);
@@ -108,10 +118,8 @@ public class InboxFragment extends ListFragment {
         @Override
         public void onRefresh() {
             Toast.makeText(getActivity(),"We're refreshing!", Toast.LENGTH_SHORT).show();
-            if (mSwipeRefreshLayout.isRefreshing())
-            {
-            mSwipeRefreshLayout.setRefreshing(false);
-            }
+            retrieveMessages();
+
         }
     };
 }

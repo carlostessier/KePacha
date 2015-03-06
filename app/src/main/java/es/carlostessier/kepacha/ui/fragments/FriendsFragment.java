@@ -2,13 +2,15 @@ package es.carlostessier.kepacha.ui.fragments;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -19,16 +21,18 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.carlostessier.kepacha.utils.ParseConstants;
 import es.carlostessier.kepacha.R;
+import es.carlostessier.kepacha.UserAdapter;
+import es.carlostessier.kepacha.utils.ParseConstants;
 
 /**
  *
  * Created by carlosfernandez on 30/12/14.
  * interfaces00 branch
  */
-public class FriendsFragment extends ListFragment {
+public class FriendsFragment extends Fragment {
 
+    protected GridView mGridView;
     final static String TAG = FriendsFragment.class.getName();
 
     List<ParseUser> mUsers;
@@ -49,6 +53,11 @@ public class FriendsFragment extends ListFragment {
         spinner = (ProgressBar)
                 rootView.findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
+        mGridView = (GridView)rootView.findViewById(R.id.friendsGrid);
+
+        TextView emptyTextView = (TextView)rootView.findViewById(android.R.id.empty);
+        mGridView.setEmptyView(emptyTextView);
+
         return rootView;
     }
 
@@ -56,7 +65,7 @@ public class FriendsFragment extends ListFragment {
     public void onResume() {
         super.onResume();
 
-        setListView();
+        setmGridView();
 
         mCurrentUser = ParseUser.getCurrentUser();
 
@@ -91,14 +100,23 @@ public class FriendsFragment extends ListFragment {
 
     }
 
-    private void setListView() {
+    private void setmGridView() {
         usernames= new ArrayList<>();
 
-        adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,usernames);
-        setListAdapter(adapter);
+        adapter = new ArrayAdapter<>(
+                getActivity(),
+                android.R.layout.simple_list_item_1,usernames);
+        mGridView.setAdapter(adapter);
+//        if (mGridView.getAdapter() == null) {
+//            UserAdapter adapter2 = new UserAdapter(getActivity(), mUsers);
+//            mGridView.setAdapter(adapter2);
+//        } else {
+//            ((UserAdapter)mGridView.getAdapter()).refill(mUsers);
 
-
+//        }
     }
+
+//    }
 
     private void errorEditFriendsdDialog(String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
